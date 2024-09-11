@@ -150,7 +150,7 @@ export const getalldata = async (req, res) => {
 export const logout = (req, res) => {
   if (req.cookies&&req.cookies["accessToken"]) {
       console.log(req.cookies["accessToken"]);
-    return res.clearCookie("accessToken",{httpOnly:false,secure:false,sameSite:'none'}).json({ message: "You are logged out" });
+    return res.clearCookie("accessToken",{httpOnly:true,secure:true,sameSite:'None'}).json({ message: "You are logged out" });
 
   }
   return res.json({ message: "you are already logged out" });
@@ -195,30 +195,31 @@ export const filter = async (req, res) => {
     console.log(Max);
     let total = (linkedin.count + insta.count + twitter.count + facebook.count + youtube.count);
     console.log(total);
-    if (Max === linkedin.count && total > new_arr[0] && total <= new_arr[1]) {
-      if (platform === "linkedin") {
+   
+    if ((Max == Number( linkedin.count )) && total >= new_arr[0] && total <= new_arr[1]) {
+      if (platform == "linkedin") {
         ans.push(filter_creator[i]);
       }
     }
-    else if (Max === insta.count && total >= new_arr[0] && total <= new_arr[1]) {
+     if ((Max == Number(insta.count)) && total >= new_arr[0] && total <= new_arr[1]) {
       console.log("hello");
       if (platform == "insta") {
         console.log("hello");
         ans.push(filter_creator[i]);
       }
     }
-    else if (Max === twitter.count && total >= new_arr[0] && total <= new_arr[1]) {
-      if (platform === "twitter") {
+     if ((Max == Number(twitter.count)) && total >= new_arr[0] && total <= new_arr[1]) {
+      if (platform == "twitter") {
         ans.push(filter_creator[i]);
       }
     }
-    else if (Max === facebook.count && total >= new_arr[0] && total <= new_arr[1]) {
-      if (platform === "facebook") {
+     if ((Max == Number(facebook.count)) && total >= new_arr[0] && total <= new_arr[1]) {
+      if (platform == "facebook") {
         ans.push(filter_creator[i]);
       }
     }
-    else if (Max === youtube.count && total >= new_arr[0] && total <= new_arr[1]) {
-      if (platform === "youtube") {
+     if ((Max == Number(youtube.count) )&& total >= new_arr[0] && total <= new_arr[1]) {
+      if (platform == "youtube") {
         ans.push(filter_creator[i]);
       }
     }
