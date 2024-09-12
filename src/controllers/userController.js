@@ -320,13 +320,13 @@ export const handleContact=async(req,res)=>{
   const transporter = nodemailer.createTransport({
     service:'gmail',
     auth: {
-      user: 'shubham893610@gmail.com',
-      pass: 'yfjtcicrgrixdzse',
+      user: 'thedrag.website@gmail.com',
+      pass: 'mnbsroulfuvwcfrb',
     },
   });
 
   const mailOptions = {
-    from: 'Shubham Chauhan <shubhamchauhan893610@gmail.com>',
+    from: 'Drag <thedrag.website@gmail.com>',
     to:creatorEmail,
     
     attachments:[{filename:req.file.filename , path:req.file.path}],
