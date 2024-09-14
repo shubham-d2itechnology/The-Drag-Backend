@@ -21,24 +21,40 @@ const creatorSchema=new Schema({
       socialMedia:{
           insta:{
             url:String,
-            count:Number
+            count:{
+              type:Number,
+              
+            }
+          
           },
 
           twitter:{
             url:String,
-            count:Number
-        },
+            count:{
+              type:Number,
+              
+            }
+          },
           facebook:{
             url:String,
-            count:Number
+            count:{
+              type:Number,
+             
+            }
           },
           linkedin:{
             url:String,
-            count:Number
+            count:{
+              type:Number,
+             
+            }
           },
           youtube:{
             url:String,
-            count:Number
+            count:{
+              type:Number,
+             
+            }
         }
       },
       Mobile_No:{
@@ -50,6 +66,12 @@ const creatorSchema=new Schema({
       location:{
         type:String,
         required:true
+      },
+      mainPlatform:{
+        type:[],
+      },
+      count:{
+        type:Number,
       }
       // location:{
       //   type:String,

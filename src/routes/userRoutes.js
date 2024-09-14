@@ -1,5 +1,5 @@
 import express from 'express';
-import { createUser, userLogin,handleCreatorRegister,getalldata,logout ,handlesearch,filter,handleCreatorEdit,handleContact} from '../controllers/userController.js';
+import { createUser, userLogin,handleCreatorRegister,getalldata,logout ,handlesearch,filter,handleCreatorEdit,handleContact, filters} from '../controllers/userController.js';
 import multer from 'multer';
 import path from 'path'
 
@@ -17,7 +17,7 @@ router.route('/register').post(upload.single('profileImage'),handleCreatorRegist
 router.route('/').get(getalldata);
 router.route('/logout').post(logout);
 router.route('/search').post(handlesearch);
-router.route('/filter').post(filter);
+router.route('/filter').post(filters);
 router.route('/edit').post(upload.single('profileImage'),handleCreatorEdit);
 router.route('/contact').post(upload.single('attachment'),handleContact);
 export default router;
