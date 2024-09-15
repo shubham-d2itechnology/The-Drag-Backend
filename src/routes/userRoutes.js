@@ -1,5 +1,7 @@
 import express from 'express';
-import { createUser, userLogin,handleCreatorRegister,getalldata,logout ,handlesearch,filter,handleCreatorEdit,handleContact, filters} from '../controllers/userController.js';
+import { createUser, userLogin,getalldata,logout, handleContact} from '../controllers/userController.js';
+import {filters,handlesearch} from '../controllers/searchFilter.controller.js'
+import { handleCreatorRegister,handleCreatorEdit } from '../controllers/UserRegister.controller.js';
 import multer from 'multer';
 import path from 'path'
 
