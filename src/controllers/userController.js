@@ -150,7 +150,7 @@ Profile Image, Location,Type and User Name are required`})
     location: location,
     image: image_url,
     mainPlatform:MainPlatform,
-    count:totalfollowers
+    count:(totalfollowers>=1)?totalfollowers:0,
 
   })
 
@@ -327,8 +327,7 @@ export const filters = async (req, res) => {
     lb=0;
     ub=1000000000000000;
   }
-    let sortType=-1;
-    if(sort ==="asc") sortType=1;
+
 
     console.log(lb,ub,type,location, platform);
     const filter = {};
