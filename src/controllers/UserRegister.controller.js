@@ -1,6 +1,5 @@
 import User from "../models/user.model.js"
 import Creator from "../models/creator.model.js"
-import { v2 as cloudinary } from 'cloudinary'
 import jwt from 'jsonwebtoken'
 
 export const handleCreatorRegister = async (req, res) => {
@@ -14,9 +13,9 @@ export const handleCreatorRegister = async (req, res) => {
   
     }
   
-    const file = req.file.path;
-    let image_url;
-    await cloudinary.uploader.upload(file, { use_filename: true }).then((res) => { image_url = res.url });
+    const file = req.file;
+    let image_url=`https://thedrag.in/apis/uploads/${file.filename}`;
+    
     const token = req.cookies["accessToken"];
     const data = jwt.verify(token, process.env.SECRET_KEY);
     const user = await User.findOne({ email: data.email });
@@ -26,52 +25,69 @@ export const handleCreatorRegister = async (req, res) => {
       return res.json({ success: false, error: "User Already Registered !" });
     }
     let MainPlatform=[];
-    let MaxCount=Math.max(instacount,linkedincount,twittercount,facebookcount,youtubecount);
+    let MaxCount=Math.max(Number(instacount),Number(linkedincount),Number(twittercount),Number(facebookcount),Number(youtubecount));
     let totalfollowers=Number(instacount)+Number(linkedincount)+Number(twittercount)+Number(facebookcount)+Number(youtubecount);
-    if(instacount==MaxCount)MainPlatform.push("instagram");
-    if(linkedincount==MaxCount)MainPlatform.push("linkedin");
-    if(twittercount==MaxCount)MainPlatform.push("twitter");
-    if(facebookcount==MaxCount)MainPlatform.push("facebook");
-    if(youtubecount==MaxCount)MainPlatform.push("youtube");
+    if(Number(instacount)==MaxCount)MainPlatform.push("instagram");
+    if(Number(linkedincount)==MaxCount)MainPlatform.push("linkedin");
+    if(Number(twittercount)==MaxCount)MainPlatform.push("twitter");
+    if(Number(facebookcount)==MaxCount)MainPlatform.push("facebook");
+    if(Number(youtubecount)==MaxCount)MainPlatform.push("youtube");
     console.log(MainPlatform);
     console.log(totalfollowers);
-  
-    const creator = await Creator.create({
-      name: user.name,
-      userName: userName,
-      email: user.email,
-      type: type,
-      Mobile_No: phone,
-      socialMedia: {
-        insta: {
-          url: insta,
-          count:(instacount>=1)?instacount:0
-        },
-        twitter: {
-          url: twitter,
-          count: (twittercount>=1)?twittercount:0,
-        },
-        linkedin: {
-          url: linkedin,
-          count: (linkedincount>=1)?linkedincount:0,
-        },
-        facebook: {
-          url: facebook,
-          count: (facebookcount>=1)?facebookcount:0,
-        },
-        youtube: {
-          url: youtube,
-          count:( youtubecount>=1)?youtubecount:0,
-        }
+  const toregister={
+    name: user.name,
+    userName: userName,
+    email: user.email,
+    type: type,
+    Mobile_No: phone,
+    socialMedia: {
+      insta: {
+        url: insta,
+        count:0
       },
-      location: location,
-      image: image_url,
-      mainPlatform:MainPlatform,
-      count:(totalfollowers>=1)?totalfollowers:0,
-  
-    })
-  
-    return res.json({ success: true });
+      twitter: {
+        url: twitter,
+        count:0
+      },
+      linkedin: {
+        url: linkedin,
+        count:0
+      },
+      facebook: {
+        url: facebook,
+        count :0
+      },
+      youtube: {
+        url: youtube,
+        count:0
+      }
+    },
+    location: location,
+    image: image_url,
+    mainPlatform:MainPlatform,
+    count:(totalfollowers>=1)?totalfollowers:0,
+
+  }
+
+  if(instacount.length>0){
+    toregister.socialMedia.insta.count=Number(instacount);
+  }
+  if(twittercount.length>0){
+    toregister.socialMedia.twitter.count=Number(twittercount);
+  }
+  if(linkedincount.length>0){
+    toregister.socialMedia.linkedin.count=Number(linkedincount);
+  }
+  if(facebookcount.length>0){
+    toregister.socialMedia.facebook.count=Number(facebookcount);
+  }
+  if(youtubecount.length>0){
+    toregister.socialMedia.youtube.count=Number(youtubecount);
+  }
+  console.log(toregister);
+    const creator = await Creator.create(toregister);
+    
+    return res.json({ success: true,message:"Registered Successfully" });
   }
   catch(error){
     console.log(error);
@@ -82,14 +98,15 @@ export const handleCreatorRegister = async (req, res) => {
 
 
 export const handleCreatorEdit = async (req, res) => {
+ 
     const { type, location, userName, phone, insta, linkedin, twitter, facebook, youtube, instacount, twittercount, linkedincount, youtubecount, facebookcount } = req.body;
-  
+
   
     let img;
     let image = null;
     if (req.file) {
-      img = await cloudinary.uploader.upload(req.file.path);
-      image = img.url;
+      
+      image = `https://thedrag.in/apis/uploads/${req.file.filename}`;
     }
   
   
@@ -99,38 +116,54 @@ export const handleCreatorEdit = async (req, res) => {
   
       const exist = await Creator.findOne({ email: data.email });
   
-  
-      const new_creator = await Creator.findOneAndUpdate({ email: data.email }, {
-        type: (type != '') ? type : exist.type,
-        userName: (userName != '') ? userName : exist.userName,
-        location: (location != '') ? location : exist.location,
-        Mobile_No: (phone != '') ? phone : exist.Mobile_No,
-        image: (image != null) ? image : exist.image,
+      const updated={
+        type: (type.trim()!=='')?type:exist.type ,
+        userName:(userName.trim()!=='')?userName:exist.userName,
+        location: (location.trim()!=='')?location:exist.location ,
+        Mobile_No: (phone!=='')?phone:exist.Mobile_No ,
+        image:  (image===null)?exist.image:image ,
         socialMedia: {
           insta: {
-            url: (insta != '') ? insta : exist.socialMedia.insta.url,
-            count: (instacount>=1) ? instacount : exist.socialMedia.insta.count,
+            url: (insta.length===0)?exist.socialMedia.insta.url:insta ,
+            count:  (instacount .length>0)?Number(instacount):0
           },
           twitter: {
-            url: (twitter != '') ? twitter : exist.socialMedia.twitter.url,
-            count: (twittercount>=1) ? twittercount : exist.socialMedia.twitter.count,
+            url: twitter ,
+            count: (twittercount.length>0 )?Number(twittercount):0,
           },
           linkedin: {
-            url: (linkedin != '') ? linkedin : exist.socialMedia.linkedin.url,
-            count: (linkedincount>=1) ? linkedincount : exist.socialMedia.linkedin.count,
+            url: linkedin ,
+            count: ( linkedincount.length>0)?Number(linkedincount):0 ,
           },
           facebook: {
-            url: (facebook != '') ? facebook : exist.socialMedia.facebook.url,
-            count: (facebookcount>=1) ? facebookcount : exist.socialMedia.facebook.count,
+            url:  facebook ,
+            count:( facebookcount.length>0)?Number(facebookcount):0 ,
           },
           youtube: {
-            url: (youtube != '') ? youtube : exist.socialMedia.youtube.url,
-            count: (youtubecount) ? youtubecount : exist.socialMedia.youtube.count,
+            url:youtube ,
+            count:  (youtubecount.length>0)?Number(youtubecount):0,
           }
-        }
-  
-      }, { new: true });
-      console.log(new_creator);
+        },
+        mainPlatform:[],
+        count:0
+      
+      }
+      let MainPlatform=[];
+    let MaxCount=Math.max(updated.socialMedia.insta.count,updated.socialMedia.linkedin.count,updated.socialMedia.twitter.count,updated.socialMedia.facebook.count,updated.socialMedia.youtube.count);
+    let totalfollowers=updated.socialMedia.insta.count+updated.socialMedia.linkedin.count+updated.socialMedia.twitter.count+updated.socialMedia.facebook.count+updated.socialMedia.youtube.count;
+    if(updated.socialMedia.insta.count==MaxCount)MainPlatform.push("instagram");
+    if(updated.socialMedia.linkedin.count==MaxCount)MainPlatform.push("linkedin");
+    if(updated.socialMedia.twitter.count==MaxCount)MainPlatform.push("twitter");
+    if(updated.socialMedia.facebook.count==MaxCount)MainPlatform.push("facebook");
+    if(updated.socialMedia.youtube.count==MaxCount)MainPlatform.push("youtube");
+    console.log(MainPlatform);
+    console.log(totalfollowers);
+      console.log("updated",updated);
+      updated.mainPlatform=MainPlatform;
+      updated.count=totalfollowers;
+
+       const new_creator = await Creator.findOneAndUpdate({ email: data.email },updated, { new: true });
+      console.log("new_creator",new_creator);
       return res.status(200).json({ success: true, message: 'Creator Data updated Successfully' });
     }
     catch (error) {

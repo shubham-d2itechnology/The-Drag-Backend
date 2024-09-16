@@ -21,7 +21,7 @@ app.use(express.json());
 
 app.use(express.urlencoded({extended:false}));
 app.use(cors({
-    origin:'https://thedrag.in',
+    origin:'http://localhost:3000',
     credentials:true,
         
 
@@ -40,7 +40,7 @@ app.get('/', (req, res) => {
     res.send('Welcome to Drag');
 });
 app.use('/v1/apis',userRoutes);
-
+app.use('/uploads',express.static('src/uploads'))
 
 connectDB()
 .then(()=>{

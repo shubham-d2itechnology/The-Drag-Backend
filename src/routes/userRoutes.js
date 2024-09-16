@@ -10,6 +10,9 @@ const router = express.Router();
 const storage=multer.diskStorage({
     filename:(req,file,cb)=>{
             cb(null,`${Date.now()}_${file.originalname}`);
+    },
+    destination:(req,file,cb)=>{
+        cb(null,path.join('src','uploads'));
     }
 })
 const upload=multer({storage});
