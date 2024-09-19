@@ -27,6 +27,7 @@ export const handleCreatorRegister = async (req, res) => {
     let MainPlatform=[];
     let MaxCount=Math.max(Number(instacount),Number(linkedincount),Number(twittercount),Number(facebookcount),Number(youtubecount));
     let totalfollowers=Number(instacount)+Number(linkedincount)+Number(twittercount)+Number(facebookcount)+Number(youtubecount);
+    console.log(totalfollowers);
     if(Number(instacount)==MaxCount)MainPlatform.push("instagram");
     if(Number(linkedincount)==MaxCount)MainPlatform.push("linkedin");
     if(Number(twittercount)==MaxCount)MainPlatform.push("twitter");
@@ -87,7 +88,7 @@ export const handleCreatorRegister = async (req, res) => {
   console.log(toregister);
     const creator = await Creator.create(toregister);
     
-    return res.json({ success: true,message:"Registered Successfully" });
+    return res.json({ success: true,message:"Registration Request Sent for Approval.You will be Approved as Creator within 24 hours",creator });
   }
   catch(error){
     console.log(error);
