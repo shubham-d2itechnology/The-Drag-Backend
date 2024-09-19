@@ -75,8 +75,8 @@ const creatorSchema=new Schema({
         default:0
       },
       approved:{
-        type:Boolean,
-        default:false
+        type:String,
+        default:'pending'
       }
       // location:{
       //   type:String,
