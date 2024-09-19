@@ -73,6 +73,10 @@ const creatorSchema=new Schema({
       count:{
         type:Number,
         default:0
+      },
+      approved:{
+        type:Boolean,
+        default:false
       }
       // location:{
       //   type:String,
@@ -81,7 +85,7 @@ const creatorSchema=new Schema({
         
       // }
 
-})
+},{timestamps:true});
 
 const Creator=mongoose.model("creator",creatorSchema);
 export default Creator;
