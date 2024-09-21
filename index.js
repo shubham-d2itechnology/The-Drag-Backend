@@ -21,7 +21,7 @@ app.use(express.json());
 
 app.use(express.urlencoded({extended:false}));
 app.use(cors({
-    origin:'https://thedrag.in',
+    origin:'https://thedrag.in/apis',
     credentials:true,
         
 
