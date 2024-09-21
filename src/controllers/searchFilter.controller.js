@@ -57,16 +57,25 @@ export const handlesearch = async (req, res) => {
       if (type && type !== "") {
         filter.type = { $regex: type, $options: 'i' }; // Case-insensitive regex
       }
-    
       if (location && location !== "") {
         filter.location = { $regex: location, $options: 'i' }; // Case-insensitive regex
       }
-    
-      if (platform && platform !== "") {
-        // Since mainPlatform is an array, we don't need $regex, we use $in
-        filter.mainPlatform = { $in:[platform] }; 
-      }
-      filter.count={$gte:lb,$lte:ub};
+      
+     if(platform==="instagram"){
+      filter.socialMedia.insta.count={$gte:lb,$lte:ub};
+     }
+     else if(platform==="linkedin"){
+      filter.socialMedia.linkedin.count={$gte:lb,$lte:ub};
+     }
+     else if(platform==="twitter"){
+      filter.socialMedia.twitter.count={$gte:lb,$lte:ub};
+     }
+     else if(platform==="facebook"){
+      filter.socialMedia.facebook.count={$gte:lb,$lte:ub};
+     }
+     else if(platform==="youtube"){
+      filter.socialMedia.youtube.count={$gte:lb,$lte:ub};
+     }
     
         console.log(filter);
   
