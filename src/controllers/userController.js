@@ -44,7 +44,8 @@ path:'/',
   return res.status(201).cookie("accessToken", token,options).json({
     newUser,
     success: true,
-    iscreator: false,
+    iscreator:"false",
+    email
   }
   );
 
@@ -67,9 +68,11 @@ export const userLogin = async (req, res) => {
     let iscreator;
 
     if (creator == null) {
-      iscreator = false;
+      iscreator = 'false';
     }
-    else iscreator = true;
+    else{
+      iscreator=creator.approved;
+    }
     
 
     const options = {
@@ -87,7 +90,8 @@ path:'/',
       .json({
         success: true,
         user,
-        iscreator
+        iscreator,
+        email
       });
 
   } catch (error) {

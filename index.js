@@ -8,11 +8,7 @@ import cookieParser from 'cookie-parser';
 
 dotenv.config({path:'.env'}); 
 
-cloudinary.config({
-    cloud_name:process.env.CLOUD_NAME,
-    api_key:process.env.API_KEY,
-    api_secret:process.env.API_SECRET
-})
+
 
 
 const app = express();
@@ -21,7 +17,7 @@ app.use(express.json());
 
 app.use(express.urlencoded({extended:false}));
 app.use(cors({
-    origin:'https://thedrag.in/apis',
+    origin:'http://localhost:3000',
     credentials:true,
         
 

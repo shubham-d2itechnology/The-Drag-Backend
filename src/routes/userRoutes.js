@@ -2,8 +2,10 @@ import express from 'express';
 import { createUser, userLogin,getalldata,logout, handleContact} from '../controllers/userController.js';
 import {filters,handlesearch} from '../controllers/searchFilter.controller.js'
 import { handleCreatorRegister,handleCreatorEdit } from '../controllers/UserRegister.controller.js';
+import { senderdata } from '../controllers/senderdata.controller.js';
 import multer from 'multer';
 import path from 'path'
+import { createDeal, deleteDeal ,getDeals} from '../controllers/deals.controller.js';
 
 const router = express.Router();
 
@@ -25,4 +27,6 @@ router.route('/search').post(handlesearch);
 router.route('/filter').post(filters);
 router.route('/edit').post(upload.single('profileImage'),handleCreatorEdit);
 router.route('/contact').post(upload.single('attachment'),handleContact);
+router.route('/deals').post(createDeal).delete(deleteDeal).get(getDeals);
+
 export default router;
